@@ -15,7 +15,7 @@ def callback(ch, method, properties, body):
 
 channel.queue_bind(exchange='logs', queue=result.method.queue)
 
-channel.basic_consume(queue='hello', on_message_callback=callback)
+channel.basic_consume(queue=result.method.queue, on_message_callback=callback, auto_ack=True)
 
 print('Waiting for messages. To exit press CTRL+C')
 channel.start_consuming()
