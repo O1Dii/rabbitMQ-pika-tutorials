@@ -5,16 +5,10 @@ import pika
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
-channel.queue_declare(queue='task_queue', durable=True)
+channel.exchange_declare(exchange='logs', exchange_type='fanout')
 
 message = ' '.join(sys.argv[1:]) or 'Hello World!'
-channel.basic_publish(
-    exchange='',
-    routing_key='hello',
-    body=message,
-    properties=pika.BasicProperties(
-        delivery_mode=2,
-    ))
+channel.basic_publish(exchange='logs', routing_key='', body=message)
 
 print(f"Sent '{message}'")
 
